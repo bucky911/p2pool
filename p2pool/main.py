@@ -139,8 +139,12 @@ def main(args, net, datadir_path, merged_urls, worker_endpoint):
             
             if address is None:
                 print '    Getting payout address from bitcoind...'
-                address = yield deferral.retry('Error getting payout address from bitcoind:', 5)(lambda: bitcoind.rpc_getaccountaddress('p2pool'))()
-            
+                addresses = yield deferral.retry('Error getting payout address from bitcoind:', 5)(lambda: bitcoind.rpc_getaddressesbyaccount('p2pool'))()
+                if (len(addresses) > 0):
+                    address = addresses[0]
+                else:
+                    address = yield deferral.retry('Error generating payout address from bitcoind:', 5)(lambda: bitcoind.rpc_getnewaddress('p2pool','legacy'))()
+           
             with open(address_path, 'wb') as f:
                 f.write(address)
             
@@ -160,7 +164,7 @@ def main(args, net, datadir_path, merged_urls, worker_endpoint):
                 print ' ERROR: Can not use fewer than 2 addresses in dynamic mode. Resetting to 2.'
                 args.numaddresses = 2
             for i in range(args.numaddresses):
-                address = yield deferral.retry('Error getting a dynamic address from bitcoind:', 5)(lambda: bitcoind.rpc_getnewaddress('p2pool'))()
+                address = yield deferral.retry('Error getting a dynamic address from bitcoind:', 5)(lambda: bitcoind.rpc_getnewaddress('p2pool','legacy'))()
                 new_pubkey = bitcoin_data.address_to_pubkey_hash(address, net.PARENT)
                 pubkeys.addkey(new_pubkey)
 

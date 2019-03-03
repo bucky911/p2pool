@@ -155,7 +155,7 @@ class WorkerBridge(worker_interface.WorkerBridge):
             return
         self.address_throttle=time.time()
         print "ATTEMPTING TO FRESHEN ADDRESS."
-        self.address = yield deferral.retry('Error getting a dynamic address from bitcoind:', 5)(lambda: self.bitcoind.rpc_getnewaddress('p2pool'))()
+        self.address = yield deferral.retry('Error getting a dynamic address from bitcoind:', 5)(lambda: self.bitcoind.rpc_getnewaddress('p2pool','legacy'))()
         new_pubkey = bitcoin_data.address_to_pubkey_hash(self.address, self.net)
         self.pubkeys.popleft()
         self.pubkeys.addkey(new_pubkey)
