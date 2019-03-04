@@ -133,14 +133,20 @@ def main(args, net, datadir_path, merged_urls, worker_endpoint):
             
             if address is not None:
                 res = yield deferral.retry('Error validating cached address:', 5)(lambda: bitcoind.rpc_validateaddress(address))()
-                if not res['isvalid'] or not res['ismine']:
-                    print '    Cached address is either invalid or not controlled by local bitcoind!'
+                if not res['isvalid']:
+                    print '    Cached address is invalid!'
                     address = None
-            
+                else:
+                    res = yield deferral.retry('Error validating cached address:', 5)(lambda: bitcoind.rpc_getaddressinfo(address))()
+                    if not res['ismine']:
+                        print '    Cached address is not controlled by local bitcoind!'
+                        address = None
+           
             if address is None:
                 print '    Getting payout address from bitcoind...'
-                addresses = yield deferral.retry('Error getting payout address from bitcoind:', 5)(lambda: bitcoind.rpc_getaddressesbylabel('p2pool'))()
-                if (len(addresses) > 0):
+                labels = yield deferral.retry('Error getting list of labels from bitcoind:', 5)(lambda: bitcoind.rpc_listlabels())()
+                if 'p2pool' in labels:
+                    addresses = yield deferral.retry('Error getting payout address from bitcoind:', 5)(lambda: bitcoind.rpc_getaddressesbylabel('p2pool'))()   
                     address = addresses.keys()[0]
                 else:
                     address = yield deferral.retry('Error generating payout address from bitcoind:', 5)(lambda: bitcoind.rpc_getnewaddress('p2pool','legacy'))()
