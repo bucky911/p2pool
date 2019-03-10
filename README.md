@@ -113,3 +113,17 @@ If you wish to modify the mining difficulty, you may add something like "address
 
 
 If your node is behind a firewall or behind NAT (i.e. on a private IP address), you may want to forward ports to your p2pool server. P2pool uses two ports: one for p2p communication with the p2pool network, and another for both the web UI and for stratum communication with workers. For Bitcoin, those ports are 9333 (p2p) and 9332 (stratum/web). For Litecoin, they are 9326 (p2p) and 9327 (stratum/web). For Bitcoin Cash, they are 9349 (p2p) and 9348 (stratum/web).
+
+
+**Bitcoin v0.17**
+
+
+If you wish to use Bitcoin Core v0.17, then specify
+
+
+>git clone https://github.com/bucky911/p2pool.git
+
+>cd p2pool
+
+>git checkout bitcoin_17
+
