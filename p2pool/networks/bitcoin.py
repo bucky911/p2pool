@@ -19,7 +19,7 @@ MIN_TARGET = 0
 MAX_TARGET = 2**256//2**32 - 1
 PERSIST = True
 WORKER_PORT = 9332
-BOOTSTRAP_ADDRS = 'ml.toom.im ml.toom.im:9336 ml.toom.im:9334 93.77.99.166 whortonda.noip.me:9333 btc-fork.coinpool.pw:9335 crypto.office-on-the.net:9335'.split(' ')
+BOOTSTRAP_ADDRS = 'ml.toom.im ml.toom.im:9334 ru.mycoinpool.com cryptogrinder.com ge.mycoinpool.com 79.124.17.204 5.9.154.231 45.79.72.31 78.142.62.82'.split(' ')
 ANNOUNCE_CHANNEL = '#p2pool'
 VERSION_CHECK = lambda v: None if 100000 <= v else 'Bitcoin version too old. Upgrade to 0.11.2 or newer!' # not a bug. BIP65 support is ensured by SOFTFORKS_REQUIRED
 VERSION_WARNING = lambda v: None
